@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = 
 { title: 'Editar Vernaza | Invitaciones para eventos sociales en Quito', 
   description: 'Invitaciones personalizadas para matrimonios, quince años, bautizos, comuniones, graduaciones y más. Diseños exclusivos hechos en Quito, Ecuador.', 
