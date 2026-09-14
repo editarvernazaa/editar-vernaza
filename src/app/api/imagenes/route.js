@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { put, del } from '@vercel/blob';
-import { verificarAdmin } from '@/lib/verificarAdmin';
+import { verificarAdmin } from '@/lib/auth';
 
 
 export async function POST(request) {
