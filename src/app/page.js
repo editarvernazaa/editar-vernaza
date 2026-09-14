@@ -1,23 +1,32 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import Carrusel from '@/components/Carrusel';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = 
-{ title: 'Editar Vernaza | Invitaciones para eventos sociales en Quito', 
-  description: 'Invitaciones personalizadas para matrimonios, quince años, bautizos, comuniones, graduaciones y más. Diseños exclusivos hechos en Quito, Ecuador.', 
-  openGraph: { title: 'Editar Vernaza | Invitaciones para eventos sociales', 
-    description: 'Invitaciones personalizadas para cada ocasión especial.', 
-  }, };
+export const metadata = {
+  title: 'Editar Vernaza | Invitaciones para eventos sociales en Quito',
+  description: 'Invitaciones personalizadas para matrimonios, quince años, bautizos, comuniones, graduaciones y más. Diseños exclusivos hechos en Quito, Ecuador.',
+  openGraph: {
+    title: 'Editar Vernaza | Invitaciones para eventos sociales',
+    description: 'Invitaciones personalizadas para cada ocasión especial.',
+  },
+};
 
 export default async function Home() {
   const categorias = await prisma.categoria.findMany({
     orderBy: { id: 'asc' },
   });
 
+  const carrusel = await prisma.carrusel.findMany({
+    orderBy: { id: 'asc' },
+  });
+
   return (
     <main style={{ padding: '2rem' }}>
-      <h1>Editar Vernaza</h1>
+      <Carrusel items={carrusel} />
+
+      <h1 style={{ marginTop: '2rem' }}>Editar Vernaza</h1>
       <div
         style={{
           display: 'grid',

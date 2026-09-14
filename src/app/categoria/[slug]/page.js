@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import GaleriaCategoria from '@/components/GaleriaCategoria';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,27 +36,7 @@ export default async function CategoriaPage({ params }) {
       <Link href="/">← Volver al inicio</Link>
       <h1>{categoria.nombre}</h1>
 
-      {categoria.imagenes.length === 0 ? (
-        <p>Todavía no hay imágenes en esta categoría.</p>
-      ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '1rem',
-            marginTop: '1.5rem',
-          }}
-        >
-          {categoria.imagenes.map((img) => (
-            <img
-              key={img.id}
-              src={img.url}
-              alt={categoria.nombre}
-              style={{ width: '100%', borderRadius: '8px' }}
-            />
-          ))}
-        </div>
-      )}
+      <GaleriaCategoria imagenes={categoria.imagenes} nombre={categoria.nombre} />
     </main>
   );
 }
