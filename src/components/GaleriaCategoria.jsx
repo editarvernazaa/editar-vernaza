@@ -6,55 +6,37 @@ export default function GaleriaCategoria({ imagenes, nombre }) {
   const [imagenAbierta, setImagenAbierta] = useState(null);
 
   if (imagenes.length === 0) {
-    return <p>Todavía no hay imágenes en esta categoría.</p>;
+    return <p className="text-ink/60">Todavía no hay imágenes en esta categoría.</p>;
   }
 
   return (
     <>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '1rem',
-          marginTop: '1.5rem',
-        }}
-      >
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {imagenes.map((img) => (
-          <img
-            key={img.id}
-            src={img.url}
-            alt={nombre}
-            onClick={() => setImagenAbierta(img.url)}
-            onContextMenu={(e) => e.preventDefault()}
-            draggable={false}
-            style={{ width: '100%', borderRadius: '8px', cursor: 'zoom-in' }}
-          />
+          <div key={img.id} className="rounded-xl overflow-hidden border border-line">
+            <img
+              src={img.url}
+              alt={nombre}
+              onClick={() => setImagenAbierta(img.url)}
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
+              className="w-full aspect-[4/5] object-cover cursor-zoom-in hover:opacity-90 transition-opacity"
+            />
+          </div>
         ))}
       </div>
 
       {imagenAbierta && (
         <div
           onClick={() => setImagenAbierta(null)}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0,0,0,0.85)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            cursor: 'zoom-out',
-          }}
+          className="fixed inset-0 bg-ink/85 flex items-center justify-center z-[1000] cursor-zoom-out"
         >
           <img
             src={imagenAbierta}
             alt={nombre}
             onContextMenu={(e) => e.preventDefault()}
             draggable={false}
-            style={{ maxWidth: '90%', maxHeight: '90%', borderRadius: '8px' }}
+            className="max-w-[90%] max-h-[90%] rounded-lg"
           />
         </div>
       )}
