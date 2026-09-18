@@ -19,6 +19,7 @@ export async function POST(request) {
 
   const blob = await put(filename, request.body, {
     access: 'public',
+    addRandomSuffix: true,
   });
 
   const imagen = await prisma.imagen.create({

@@ -15,7 +15,7 @@ export async function POST(request) {
     return Response.json({ error: 'Faltan datos' }, { status: 400 });
   }
 
-  const blob = await put(filename, request.body, { access: 'public' });
+  const blob = await put(filename, request.body, { access: 'public', addRandomSuffix: true });
 
   const item = await prisma.carrusel.create({
     data: { url: blob.url },
