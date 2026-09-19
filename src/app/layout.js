@@ -2,6 +2,7 @@ import { Cormorant_Garamond, Pinyon_Script, Work_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -26,6 +27,8 @@ export const metadata = {
   description: "Invitaciones y detalles para eventos sociales",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -33,11 +36,9 @@ export default function RootLayout({ children }) {
       className={`${cormorant.variable} ${pinyon.variable} ${workSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
-        <div className="flex-1">
-        {children}
-        <Footer />
-        </div>
+        <SiteChrome header={<Header />} footer={<Footer />}>
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );

@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
-export default function PanelAdmin({ categorias }) {
-  const [categoriaId, setCategoriaId] = useState(categorias[0]?.id ?? '');
+export default function PanelAdmin({ categorias, carrusel }) {
+  const [seccion, setSeccion] = useState('carrusel');
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const categoriaActual = categorias.find((c) => c.id === Number(categoriaId));
+  const categoriaActual = categorias.find((c) => c.id === seccion);
+  const esCarrusel = seccion === 'carrusel';
+  const itemsActuales = esCarrusel ? carrusel : categoriaActual?.imagenes ?? [];
 
   async function handleUpload(e) {
     e.preventDefault();
@@ -25,10 +28,11 @@ export default function PanelAdmin({ categorias }) {
 
     setSubiendo(true);
 
-    const res = await fetch(
-      `/api/imagenes?categoriaId=${categoriaId}&filename=${encodeURIComponent(file.name)}`,
-      { method: 'POST', body: file }
-    );
+    const url = esCarrusel
+      ? `/api/carrusel?filename=${encodeURIComponent(file.name)}`
+      : `/api/imagenes?categoriaId=${seccion}&filename=${encodeURIComponent(file.name)}`;
+
+    const res = await fetch(url, { method: 'POST', body: file });
 
     setSubiendo(false);
 
@@ -44,7 +48,8 @@ export default function PanelAdmin({ categorias }) {
     const confirmar = confirm('¿Desea borrar esta imagen?');
     if (!confirmar) return;
 
-    const res = await fetch(`/api/imagenes?id=${id}`, { method: 'DELETE' });
+    const url = esCarrusel ? `/api/carrusel?id=${id}` : `/api/imagenes?id=${id}`;
+    const res = await fetch(url, { method: 'DELETE' });
 
     if (res.ok) {
       router.refresh();
@@ -53,39 +58,98 @@ export default function PanelAdmin({ categorias }) {
     }
   }
 
+  async function handleLogout() {
+    await fetch('/api/logout', { method: 'POST' });
+    router.push('/');
+  }
+
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Panel de administrador</h1>
-
-      <div style={{ marginBottom: '1.5rem' }}>
-        <label>Categoría: </label>
-        <select value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)}>
-          {categorias.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <form onSubmit={handleUpload} style={{ marginBottom: '2rem' }}>
-        <input type="file" name="file" accept="image/jpeg, image/png, image/webp" required />
-        <button type="submit" disabled={subiendo}>
-          {subiendo ? 'Subiendo...' : 'Subir imagen'}
+    <div className="min-h-screen flex flex-col">
+      <header className="flex items-center justify-between px-8 py-4 border-b border-line bg-cream">
+        <div className="flex items-center gap-3">
+          <span className="font-display text-xl text-ink">
+            Editar <span className="font-script text-2xl text-gold">Vernaza</span>
+          </span>
+          <span className="text-xs uppercase tracking-wide border border-line rounded-full px-3 py-1 text-ink/60">
+            Panel admin
+          </span>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-sm text-ink/70 hover:text-gold transition-colors"
+        >
+          <LogOut size={16} />
+          Salir
         </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
+      </header>
 
-      <h2>Imágenes de {categoriaActual?.nombre}</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-        {categoriaActual?.imagenes.map((img) => (
-          <div key={img.id}>
-            <img src={img.url} alt="" style={{ width: '100%', borderRadius: '8px' }} />
-            <button onClick={() => handleDelete(img.id)} style={{ marginTop: '4px' }}>
-              Borrar
+      <div className="flex flex-1">
+        <aside className="w-56 border-r border-line p-4 shrink-0">
+          <p className="text-xs uppercase tracking-widest text-ink/50 mb-3">Galerías</p>
+          <nav className="space-y-1">
+            <button
+              onClick={() => setSeccion('carrusel')}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left transition-colors ${
+                esCarrusel ? 'bg-gold text-white' : 'text-ink/80 hover:bg-line/40'
+              }`}
+            >
+              Carrusel principal
+              <span className={esCarrusel ? 'text-white/80' : 'text-ink/40'}>{carrusel.length}</span>
             </button>
-          </div>
-        ))}
+            {categorias.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSeccion(cat.id)}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm text-left transition-colors ${
+                  seccion === cat.id ? 'bg-gold text-white' : 'text-ink/80 hover:bg-line/40'
+                }`}
+              >
+                {cat.nombre}
+                <span className={seccion === cat.id ? 'text-white/80' : 'text-ink/40'}>{cat.imagenes.length}</span>
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        <main className="flex-1 p-8">
+          <p className="uppercase tracking-widest text-xs text-gold mb-2">
+            {esCarrusel ? 'Página de inicio' : 'Categoría'}
+          </p>
+          <h1 className="font-display text-3xl text-ink mb-6">
+            {esCarrusel ? 'Carrusel principal' : categoriaActual?.nombre}
+          </h1>
+
+          <form onSubmit={handleUpload} className="mb-8 flex items-center gap-3">
+            <input type="file" name="file" accept="image/jpeg, image/png, image/webp" required className="text-sm 
+            file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gold file:text-white file:cursor-pointer hover:file:bg-gold-dark file:transition-colors" />
+            <button
+              type="submit"
+              disabled={subiendo}
+              className="bg-gold text-white px-5 py-2 rounded-full hover:bg-gold-dark transition-colors disabled:opacity-60"
+            >
+              {subiendo ? 'Subiendo...' : 'Subir imagen'}
+            </button>
+          </form>
+          {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+
+          {itemsActuales.length === 0 ? (
+            <p className="text-ink/50 text-sm">Todavía no hay imágenes aquí.</p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {itemsActuales.map((img) => (
+                <div key={img.id} className="rounded-xl overflow-hidden border border-line">
+                  <img src={img.url} alt="" className="w-full aspect-[4/3] object-cover" />
+                  <button
+                    onClick={() => handleDelete(img.id)}
+                    className="w-full text-xs text-red-600 hover:bg-red-50 py-2 transition-colors"
+                  >
+                    Borrar
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
