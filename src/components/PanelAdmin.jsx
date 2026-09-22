@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
+import CambiarPassword from '@/components/CambiarPassword';
 
 export default function PanelAdmin({ categorias, carrusel }) {
   const [seccion, setSeccion] = useState('carrusel');
@@ -108,46 +109,65 @@ export default function PanelAdmin({ categorias, carrusel }) {
                 <span className={seccion === cat.id ? 'text-white/80' : 'text-ink/40'}>{cat.imagenes.length}</span>
               </button>
             ))}
+            <button
+              onClick={() => setSeccion('cuenta')}
+              className={`w-full flex items-center px-3 py-2 rounded-lg text-sm text-left transition-colors mt-3 ${
+                seccion === 'cuenta' ? 'bg-gold text-white' : 'text-ink/80 hover:bg-line/40'
+              }`}
+            >
+              Seguridad
+            </button>
           </nav>
         </aside>
 
         <main className="flex-1 p-8">
-          <p className="uppercase tracking-widest text-xs text-gold mb-2">
-            {esCarrusel ? 'Página de inicio' : 'Categoría'}
-          </p>
-          <h1 className="font-display text-3xl text-ink mb-6">
-            {esCarrusel ? 'Carrusel principal' : categoriaActual?.nombre}
-          </h1>
-
-          <form onSubmit={handleUpload} className="mb-8 flex items-center gap-3">
-            <input type="file" name="file" accept="image/jpeg, image/png, image/webp" required className="text-sm 
-            file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gold file:text-white file:cursor-pointer hover:file:bg-gold-dark file:transition-colors" />
-            <button
-              type="submit"
-              disabled={subiendo}
-              className="bg-gold text-white px-5 py-2 rounded-full hover:bg-gold-dark transition-colors disabled:opacity-60"
-            >
-              {subiendo ? 'Subiendo...' : 'Subir imagen'}
-            </button>
-          </form>
-          {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
-
-          {itemsActuales.length === 0 ? (
-            <p className="text-ink/50 text-sm">Todavía no hay imágenes aquí.</p>
+          {seccion === 'cuenta' ? (
+            <CambiarPassword />
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {itemsActuales.map((img) => (
-                <div key={img.id} className="rounded-xl overflow-hidden border border-line">
-                  <img src={img.url} alt="" className="w-full aspect-[4/3] object-cover" />
-                  <button
-                    onClick={() => handleDelete(img.id)}
-                    className="w-full text-xs text-red-600 hover:bg-red-50 py-2 transition-colors"
-                  >
-                    Borrar
-                  </button>
+            <>
+              <p className="uppercase tracking-widest text-xs text-gold mb-2">
+                {esCarrusel ? 'Página de inicio' : 'Categoría'}
+              </p>
+              <h1 className="font-display text-3xl text-ink mb-6">
+                {esCarrusel ? 'Carrusel principal' : categoriaActual?.nombre}
+              </h1>
+
+              <form onSubmit={handleUpload} className="mb-8 flex items-center gap-3">
+                <input
+                  type="file"
+                  name="file"
+                  accept="image/jpeg, image/png, image/webp"
+                  required
+                  className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-gold file:text-white file:cursor-pointer hover:file:bg-gold-dark file:transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={subiendo}
+                  className="bg-gold text-white px-5 py-2 rounded-full hover:bg-gold-dark transition-colors disabled:opacity-60"
+                >
+                  {subiendo ? 'Subiendo...' : 'Subir imagen'}
+                </button>
+              </form>
+              {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+
+              {itemsActuales.length === 0 ? (
+                <p className="text-ink/50 text-sm">Todavía no hay imágenes aquí.</p>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {itemsActuales.map((img) => (
+                    <div key={img.id} className="rounded-xl overflow-hidden border border-line">
+                      <img src={img.url} alt="" className="w-full aspect-[4/3] object-cover" />
+                      <button
+                        onClick={() => handleDelete(img.id)}
+                        className="w-full text-xs text-red-600 hover:bg-red-50 py-2 transition-colors"
+                      >
+                        Borrar
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </main>
       </div>

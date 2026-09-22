@@ -13,3 +13,15 @@ export async function verificarAdmin() {
     }
     catch { return false; }
 } 
+
+export async function obtenerAdminId() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('admin_session')?.value;
+  if (!token) return null;
+  try {
+    const { payload } = await jwtVerify(token, secret);
+    return payload.adminId;
+  } catch {
+    return null;
+  }
+}
