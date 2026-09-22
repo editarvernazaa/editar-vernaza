@@ -1,9 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Carrusel({ items, fill = false }) {
   const [indice, setIndice] = useState(0);
+
+  useEffect(() => {
+    if (items.length <= 1) return;
+
+    const intervalo = setInterval(() => {
+      setIndice((i) => (i === items.length - 1 ? 0 : i + 1));
+    }, 4000);
+
+    return () => clearInterval(intervalo);
+  }, [items.length]);
 
   if (items.length === 0) return null;
 
@@ -43,8 +53,8 @@ export default function Carrusel({ items, fill = false }) {
       <div
         className="overflow-hidden"
         style={{
-          maskImage: 'radial-gradient(ellipse at center, black 75%, transparent 100%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at center, black 75%, transparent 100%)',
+          maskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
         }}
       >
         <img src={items[indice].url} alt="" className="w-full aspect-[4/3] object-cover" />
