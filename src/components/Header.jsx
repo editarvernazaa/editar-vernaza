@@ -1,10 +1,12 @@
+import Image from 'next/image';
+
 export default function Header() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const mapsUrl = process.env.NEXT_PUBLIC_MAPS_URL;
 
   return (
     <header className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 border-b border-line gap-2">
-      <img src="/logo.png" alt="Editar Vernaza" className="h-9 sm:h-12" />
+      <Image src="/logo.png" alt="Editar Vernaza" width={48} height={48} className="h-9 sm:h-12 w-auto" />
 
       <div className="flex items-center gap-2 sm:gap-4">
         <a

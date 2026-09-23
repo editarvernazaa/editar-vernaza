@@ -12,6 +12,8 @@
 @theme inline {
   --color-background: var(--color-cream);
   --color-foreground: var(--color-ink);
+  --color-cream: var(--color-cream);
+  --color-ink: var(--color-ink);
   --color-gold: var(--color-gold);
   --color-gold-dark: var(--color-gold-dark);
   --color-rose: var(--color-rose);

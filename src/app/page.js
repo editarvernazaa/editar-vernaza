@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import Image from 'next/image';
 import Carrusel from '@/components/Carrusel';
 import { categoriaIconos, iconoPorDefecto } from '@/lib/categoriaIconos';
 import { Gem, Award, HeartHandshake, Truck } from 'lucide-react';
@@ -78,10 +79,12 @@ export default async function Home() {
               <Link key={cat.id} href={`/categoria/${cat.slug}`} className="group block no-underline">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden">
                   {foto ? (
-                    <img
+                    <Image
                       src={foto}
                       alt=""
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-rose/20" />

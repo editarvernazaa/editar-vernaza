@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
+import Image from 'next/image';
 import CambiarPassword from '@/components/CambiarPassword';
 
 export default function PanelAdmin({ categorias, carrusel }) {
   const [seccion, setSeccion] = useState('carrusel');
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState('');
+  const [imagenABorrar, setImagenABorrar] = useState(null);
   const router = useRouter();
 
   const categoriaActual = categorias.find((c) => c.id === seccion);
@@ -51,9 +53,9 @@ export default function PanelAdmin({ categorias, carrusel }) {
     }
   }
 
-  async function handleDelete(id) {
-    const confirmar = confirm('¿Desea borrar esta imagen?');
-    if (!confirmar) return;
+  async function confirmarBorrado() {
+    const id = imagenABorrar;
+    setImagenABorrar(null);
 
     const url = esCarrusel ? `/api/carrusel?id=${id}` : `/api/imagenes?id=${id}`;
     const res = await fetch(url, { method: 'DELETE' });
@@ -91,7 +93,6 @@ export default function PanelAdmin({ categorias, carrusel }) {
       </header>
 
       <div className="flex flex-col md:flex-row flex-1">
-        {/* Menú horizontal: solo en celular/tablet */}
         <nav className="md:hidden flex gap-2 overflow-x-auto px-4 py-3 border-b border-line">
           <button onClick={() => setSeccion('carrusel')} className={claseBoton(esCarrusel)}>
             Carrusel
@@ -106,7 +107,6 @@ export default function PanelAdmin({ categorias, carrusel }) {
           </button>
         </nav>
 
-        {/* Barra lateral: solo en pantallas medianas para arriba */}
         <aside className="hidden md:block w-56 border-r border-line p-4 shrink-0">
           <p className="text-xs uppercase tracking-widest text-ink/50 mb-3">Galerías</p>
           <nav className="space-y-1">
@@ -178,9 +178,11 @@ export default function PanelAdmin({ categorias, carrusel }) {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {itemsActuales.map((img) => (
                     <div key={img.id} className="rounded-xl overflow-hidden border border-line">
-                      <img src={img.url} alt="" className="w-full aspect-[4/3] object-cover" />
+                      <div className="relative aspect-[4/3]">
+                        <Image src={img.url} alt="" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                      </div>
                       <button
-                        onClick={() => handleDelete(img.id)}
+                        onClick={() => setImagenABorrar(img.id)}
                         className="w-full text-xs text-red-600 hover:bg-red-50 py-2 transition-colors"
                       >
                         Borrar
@@ -193,6 +195,29 @@ export default function PanelAdmin({ categorias, carrusel }) {
           )}
         </main>
       </div>
+
+      {imagenABorrar && (
+        <div className="fixed inset-0 bg-ink/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-cream rounded-2xl p-6 max-w-sm w-full border border-line">
+            <p className="font-display text-xl text-ink mb-2">¿Esta seguro de borrar esta imagen?</p>
+            <p className="text-sm text-ink/60 mb-6">Esta acción no se puede deshacer.</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setImagenABorrar(null)}
+                className="px-4 py-2 rounded-full text-sm text-ink/70 hover:bg-line/40 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmarBorrado}
+                className="px-4 py-2 rounded-full text-sm bg-red-600 text-white hover:bg-red-700 transition-colors"
+              >
+                Borrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

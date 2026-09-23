@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function Carrusel({ items, fill = false }) {
   const [indice, setIndice] = useState(0);
@@ -28,10 +29,13 @@ export default function Carrusel({ items, fill = false }) {
   if (fill) {
     return (
       <>
-        <img
+        <Image
           src={items[indice].url}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
         />
         {items.length > 1 && (
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
@@ -51,13 +55,19 @@ export default function Carrusel({ items, fill = false }) {
   return (
     <div className="relative">
       <div
-        className="overflow-hidden"
+        className="relative overflow-hidden aspect-[4/3]"
         style={{
           maskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
           WebkitMaskImage: 'radial-gradient(ellipse at center, black 60%, transparent 100%)',
         }}
       >
-        <img src={items[indice].url} alt="" className="w-full aspect-[4/3] object-cover" />
+        <Image
+          src={items[indice].url}
+          alt=""
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover"
+        />
       </div>
       {items.length > 1 && (
         <>

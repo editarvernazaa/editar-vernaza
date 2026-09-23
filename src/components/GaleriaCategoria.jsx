@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function GaleriaCategoria({ imagenes, nombre }) {
   const [imagenAbierta, setImagenAbierta] = useState(null);
@@ -13,14 +14,16 @@ export default function GaleriaCategoria({ imagenes, nombre }) {
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {imagenes.map((img) => (
-          <div key={img.id} className="rounded-xl overflow-hidden border border-line">
-            <img
+          <div key={img.id} className="relative aspect-[4/5] rounded-xl overflow-hidden border border-line">
+            <Image
               src={img.url}
               alt={nombre}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               onClick={() => setImagenAbierta(img.url)}
               onContextMenu={(e) => e.preventDefault()}
               draggable={false}
-              className="w-full aspect-[4/5] object-cover cursor-zoom-in hover:opacity-90 transition-opacity"
+              className="object-cover cursor-zoom-in hover:opacity-90 transition-opacity"
             />
           </div>
         ))}
