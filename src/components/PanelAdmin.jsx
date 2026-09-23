@@ -15,6 +15,12 @@ export default function PanelAdmin({ categorias, carrusel }) {
   const esCarrusel = seccion === 'carrusel';
   const itemsActuales = esCarrusel ? carrusel : categoriaActual?.imagenes ?? [];
 
+  function claseBoton(activo) {
+    return `shrink-0 flex items-center gap-2 px-3 py-2 rounded-full md:rounded-lg text-sm whitespace-nowrap transition-colors ${
+      activo ? 'bg-gold text-white' : 'text-ink/80 hover:bg-line/40 border border-line md:border-0'
+    }`;
+  }
+
   async function handleUpload(e) {
     e.preventDefault();
     setError('');
@@ -66,26 +72,42 @@ export default function PanelAdmin({ categorias, carrusel }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex items-center justify-between px-8 py-4 border-b border-line bg-cream">
-        <div className="flex items-center gap-3">
-          <span className="font-display text-xl text-ink">
-            Editar <span className="font-script text-2xl text-gold">Vernaza</span>
+      <header className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4 border-b border-line bg-cream gap-2">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <span className="font-display text-lg sm:text-xl text-ink truncate">
+            Editar <span className="font-script text-xl sm:text-2xl text-gold">Vernaza</span>
           </span>
-          <span className="text-xs uppercase tracking-wide border border-line rounded-full px-3 py-1 text-ink/60">
+          <span className="hidden sm:inline-block text-xs uppercase tracking-wide border border-line rounded-full px-3 py-1 text-ink/60">
             Panel admin
           </span>
         </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 text-sm text-ink/70 hover:text-gold transition-colors"
+          className="flex items-center gap-2 text-sm text-ink/70 hover:text-gold transition-colors shrink-0"
         >
           <LogOut size={16} />
-          Salir
+          <span className="hidden sm:inline">Salir</span>
         </button>
       </header>
 
-      <div className="flex flex-1">
-        <aside className="w-56 border-r border-line p-4 shrink-0">
+      <div className="flex flex-col md:flex-row flex-1">
+        {/* Menú horizontal: solo en celular/tablet */}
+        <nav className="md:hidden flex gap-2 overflow-x-auto px-4 py-3 border-b border-line">
+          <button onClick={() => setSeccion('carrusel')} className={claseBoton(esCarrusel)}>
+            Carrusel
+          </button>
+          {categorias.map((cat) => (
+            <button key={cat.id} onClick={() => setSeccion(cat.id)} className={claseBoton(seccion === cat.id)}>
+              {cat.nombre}
+            </button>
+          ))}
+          <button onClick={() => setSeccion('cuenta')} className={claseBoton(seccion === 'cuenta')}>
+            Seguridad
+          </button>
+        </nav>
+
+        {/* Barra lateral: solo en pantallas medianas para arriba */}
+        <aside className="hidden md:block w-56 border-r border-line p-4 shrink-0">
           <p className="text-xs uppercase tracking-widest text-ink/50 mb-3">Galerías</p>
           <nav className="space-y-1">
             <button
@@ -120,7 +142,7 @@ export default function PanelAdmin({ categorias, carrusel }) {
           </nav>
         </aside>
 
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 sm:p-8">
           {seccion === 'cuenta' ? (
             <CambiarPassword />
           ) : (
@@ -128,11 +150,11 @@ export default function PanelAdmin({ categorias, carrusel }) {
               <p className="uppercase tracking-widest text-xs text-gold mb-2">
                 {esCarrusel ? 'Página de inicio' : 'Categoría'}
               </p>
-              <h1 className="font-display text-3xl text-ink mb-6">
+              <h1 className="font-display text-2xl sm:text-3xl text-ink mb-6">
                 {esCarrusel ? 'Carrusel principal' : categoriaActual?.nombre}
               </h1>
 
-              <form onSubmit={handleUpload} className="mb-8 flex items-center gap-3">
+              <form onSubmit={handleUpload} className="mb-8 flex flex-col sm:flex-row sm:items-center gap-3">
                 <input
                   type="file"
                   name="file"
@@ -143,7 +165,7 @@ export default function PanelAdmin({ categorias, carrusel }) {
                 <button
                   type="submit"
                   disabled={subiendo}
-                  className="bg-gold text-white px-5 py-2 rounded-full hover:bg-gold-dark transition-colors disabled:opacity-60"
+                  className="bg-gold text-white px-5 py-2 rounded-full hover:bg-gold-dark transition-colors disabled:opacity-60 sm:w-auto w-full"
                 >
                   {subiendo ? 'Subiendo...' : 'Subir imagen'}
                 </button>
