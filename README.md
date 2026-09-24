@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Editar Vernaza — Página web
 
-## Getting Started
+Página web para Editar Vernaza (invitaciones y detalles para eventos sociales), con panel de administrador para gestionar las categorías, imágenes y el carrusel del inicio.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Frontend + Backend**: Next.js (App Router)
+- **Base de datos**: PostgreSQL, alojada en [Neon](https://neon.tech)
+- **ORM**: Prisma (con `@prisma/adapter-pg`, sin motor binario)
+- **Almacenamiento de imágenes**: Vercel Blob
+- **Autenticación**: JWT propio (login del admin), con `bcryptjs` para contraseñas
+- **Estilos**: Tailwind CSS
+- **Despliegue**: Vercel
+
+## Correr el proyecto en local
+
+1. Instalar dependencias:
+
+```
+   npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Crear un archivo `.env` en la raíz con estas variables (pide los valores reales a quien administre el proyecto):
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```
+   DATABASE_URL=
+   JWT_SECRET=
+   ADMIN_EMAIL=
+   ADMIN_PASSWORD=
+   NEXT_PUBLIC_WHATSAPP_NUMBER=
+   NEXT_PUBLIC_MAPS_URL=
+   BLOB_READ_WRITE_TOKEN=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Generar el cliente de Prisma y crear las tablas (si es la primera vez, contra una base local vacía):
 
-## Learn More
+```
+   npx prisma generate
+   npx prisma migrate dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Correr el proyecto:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+   npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Crear o resetear el usuario administrador
 
-## Deploy on Vercel
+Con `ADMIN_EMAIL` y `ADMIN_PASSWORD` puestos en el `.env`, correr:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+npx tsx scripts/create-admin.ts
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Despliegue
+
+El proyecto se despliega automáticamente en Vercel con cada `git push` a la rama `main`. Las variables de entorno de producción se configuran en Vercel → Settings → Environment Variables (deben coincidir con las del `.env` local, pero apuntando a la base de datos de Neon en vez de una local).
+
+## Estructura del proyecto
+
+- `/categoria/[slug]` — página pública de cada categoría, con galería de imágenes
+- `/admin` — login del administrador
+- `/admin/panel` — panel para subir/borrar imágenes del carrusel y las categorías, y cambiar la contraseña
