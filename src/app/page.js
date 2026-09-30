@@ -68,7 +68,7 @@ export default async function Home() {
           Nuestras colecciones
         </p>
         <h2 className="font-display text-3xl text-ink text-center mb-10">
-          Encuentra el diseño perfecto para tu ocasión
+          Encuentra el diseño perfecto para tu evento
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
           {categorias.map((cat) => {

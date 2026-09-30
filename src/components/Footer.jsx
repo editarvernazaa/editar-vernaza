@@ -36,7 +36,7 @@ export default async function Footer() {
         <div>
           <p className="font-display text-sm uppercase tracking-wide text-ink mb-4">Horarios</p>
           <p className="text-sm text-ink/70">Lunes a Viernes</p>
-          <p className="text-sm text-ink/70 mb-3">08:30am - 18:00pm</p>
+          <p className="text-sm text-ink/70 mb-3">09:00am - 17:30pm</p>
           <p className="text-sm text-ink/70">Sábados</p>
           <p className="text-sm text-ink/70">09:00am - 12:30pm</p>
         </div>
@@ -51,7 +51,7 @@ export default async function Footer() {
             alexisvernaza@yahoo.com
           </a>
           <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="block text-sm text-ink/70 hover:text-gold transition-colors mt-2">
-            Av. Diego de Vásquez N75-274 y Av. Mariscal Sucre, Quito
+            Av. Jose Ordóñez Oe3-984 y Octavio Cordero, Quito
           </a>
         </div>
       </div>
