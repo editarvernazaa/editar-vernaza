@@ -14,7 +14,7 @@ export default function GaleriaCategoria({ imagenes, nombre }) {
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {imagenes.map((img) => (
-          <div key={img.id} className="relative aspect-[4/5] rounded-xl overflow-hidden border border-line">
+         <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden border border-line">
             <Image
               src={img.url}
               alt={nombre}

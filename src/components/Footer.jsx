@@ -37,8 +37,6 @@ export default async function Footer() {
           <p className="font-display text-sm uppercase tracking-wide text-ink mb-4">Horarios</p>
           <p className="text-sm text-ink/70">Lunes a Viernes</p>
           <p className="text-sm text-ink/70 mb-3">09:00am - 17:30pm</p>
-          <p className="text-sm text-ink/70">Sábados</p>
-          <p className="text-sm text-ink/70">09:00am - 12:30pm</p>
         </div>
 
         <div>

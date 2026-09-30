@@ -178,7 +178,7 @@ export default function PanelAdmin({ categorias, carrusel }) {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                   {itemsActuales.map((img) => (
                     <div key={img.id} className="rounded-xl overflow-hidden border border-line">
-                      <div className="relative aspect-[4/3]">
+                      <div className="relative aspect-square">
                         <Image src={img.url} alt="" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                       </div>
                       <button

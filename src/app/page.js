@@ -77,7 +77,7 @@ export default async function Home() {
 
             return (
               <Link key={cat.id} href={`/categoria/${cat.slug}`} className="group block no-underline">
-                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden">
+                <div className="relative aspect-square rounded-2xl overflow-hidden">
                   {foto ? (
                     <Image
                       src={foto}
