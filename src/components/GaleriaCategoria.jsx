@@ -34,13 +34,19 @@ export default function GaleriaCategoria({ imagenes, nombre }) {
           onClick={() => setImagenAbierta(null)}
           className="fixed inset-0 bg-ink/85 flex items-center justify-center z-[1000] cursor-zoom-out"
         >
-          <img
-            src={imagenAbierta}
-            alt={nombre}
+          <div
+            className="relative w-full max-w-2xl aspect-square"
             onContextMenu={(e) => e.preventDefault()}
-            draggable={false}
-            className="max-w-[90%] max-h-[90%] rounded-lg"
-          />
+          >
+            <Image
+              src={imagenAbierta}
+              alt={nombre}
+              fill
+              sizes="90vw"
+              draggable={false}
+              className="object-contain rounded-lg"
+            />
+          </div>
         </div>
       )}
     </>
