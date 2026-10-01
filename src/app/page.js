@@ -19,10 +19,10 @@ export const metadata = {
 export default async function Home() {
   const categorias = await prisma.categoria.findMany({
     orderBy: { id: 'asc' },
-    include: { imagenes: { take: 1, orderBy: { id: 'asc' } } },
+    include: { imagenes: { take: 1, orderBy: { id: 'desc' } } },
   });
 
-  const carrusel = await prisma.carrusel.findMany({ orderBy: { id: 'asc' } });
+  const carrusel = await prisma.carrusel.findMany({ orderBy: { id: 'desc' } });
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
 
   return (

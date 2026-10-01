@@ -25,7 +25,7 @@ export default async function CategoriaPage({ params }) {
 
   const categoria = await prisma.categoria.findUnique({
     where: { slug },
-    include: { imagenes: true },
+    include: { imagenes: { orderBy: { id: 'desc' } } },
   });
 
   if (!categoria) {
