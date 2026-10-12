@@ -62,3 +62,5 @@ El proyecto se despliega automáticamente en Vercel con cada `git push` a la ram
 - `/categoria/[slug]` — página pública de cada categoría, con galería de imágenes
 - `/admin` — login del administrador
 - `/admin/panel` — panel para subir/borrar imágenes del carrusel y las categorías, y cambiar la contraseña
+
+## Prueba de deploy
