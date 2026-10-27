@@ -8,4 +8,5 @@ export const categoriaFrases = {
     personalizados: 'Algo hecho para ti', 
     requiem: 'Un homenaje con cariño', 
     fundas: 'El empaque que protege y anuncia lo que viene', 
+    navidad: 'Una Navidad llena de magia',
 };
